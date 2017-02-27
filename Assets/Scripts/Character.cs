@@ -7,13 +7,15 @@ using UnityEngine.UI;
 [RequireComponent (typeof(Collider2D))]
 public class Character : MonoBehaviour
 {
-	public float jumpHeight = 20;
+	public float maxJumpHeight = 40;
+	public float minJumpHeight = 10;
 	public float timeToJumpApex = .4f;
 
 	private Rigidbody2D body;
 	private bool onTheGround = false;
 	private float gravity;
-	private float jumpVelocity;
+	public float maxJumpVelocity;
+	public float minJumpVelocity;
 
 	void Awake ()
 	{
@@ -30,7 +32,9 @@ public class Character : MonoBehaviour
 	{
 		if (Input.GetButtonDown ("Jump") || Input.GetKeyDown (KeyCode.UpArrow))
 			Jump ();
-		else if (Input.GetKeyDown (KeyCode.DownArrow))
+		else if (Input.GetButtonUp ("Jump") || Input.GetKeyUp (KeyCode.UpArrow)) {
+			ReleaseJump ();
+		} else if (Input.GetKeyDown (KeyCode.DownArrow))
 			Duck ();
 
 		CalculateGravity ();
@@ -39,7 +43,7 @@ public class Character : MonoBehaviour
 
 	private void CalculateGravity ()
 	{
-		gravity = -(2 * jumpHeight) / Mathf.Pow (timeToJumpApex, 2);
+		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 
 		float velocityY = body.velocity.y + gravity * Time.deltaTime;
 		SetVelocityY (velocityY);
@@ -47,7 +51,8 @@ public class Character : MonoBehaviour
 
 	private void AdjustJump ()
 	{
-		jumpVelocity = Mathf.Abs (gravity) * timeToJumpApex;
+		maxJumpVelocity = Mathf.Abs (gravity) * timeToJumpApex;
+		minJumpVelocity = Mathf.Sqrt (2 * Mathf.Abs (gravity) * minJumpHeight);
 	}
 
 	private void SetVelocityY (float velocityY)
@@ -62,8 +67,15 @@ public class Character : MonoBehaviour
 		if (!onTheGround)
 			return;
 		
-		SetVelocityY (jumpVelocity);
+		SetVelocityY (maxJumpVelocity);
 		onTheGround = false;
+	}
+
+	public void ReleaseJump ()
+	{
+		if (body.velocity.y > minJumpVelocity) {
+			SetVelocityY (minJumpVelocity);
+		}
 	}
 
 	public void Duck ()
