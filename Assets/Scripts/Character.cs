@@ -14,8 +14,8 @@ public class Character : MonoBehaviour
 	private Rigidbody2D body;
 	private bool onTheGround = false;
 	private float gravity;
-	public float maxJumpVelocity;
-	public float minJumpVelocity;
+	private float maxJumpVelocity;
+	private float minJumpVelocity;
 
 	void Awake ()
 	{
