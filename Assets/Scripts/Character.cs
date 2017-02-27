@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 [RequireComponent (typeof(Rigidbody2D))]
 [RequireComponent (typeof(Collider2D))]
-public class Player : MonoBehaviour
+public class Character : MonoBehaviour
 {
 	public float jumpHeight = 20;
 	public float timeToJumpApex = .4f;

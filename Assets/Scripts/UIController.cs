@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-	private Player player;
+	private Character character;
 
 	void Awake ()
 	{
-		player = FindObjectOfType<Player> ();
+		character = FindObjectOfType<Character> ();
 	}
 
 	public void Duck ()
 	{
-		player.Duck ();
+		character.Duck ();
 	}
 
 	public void Jump ()
 	{
-		player.Jump ();
+		character.Jump ();
 	}
 }
