@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GroundController : MonoBehaviour {
 
-	public float velocity = 5f;
+	public float speedRatio = 1f;
 
 	public GameObject groundPrefab;
 	public float groundSize = 500f;
@@ -32,7 +32,7 @@ public class GroundController : MonoBehaviour {
 
 	private void UpdateGroundPosition() {
 		foreach(GameObject obj in groundPool) {
-			float speed = velocity * GameManager.instance.speed;
+			float speed = speedRatio * GameManager.instance.speed;
 			obj.transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 
