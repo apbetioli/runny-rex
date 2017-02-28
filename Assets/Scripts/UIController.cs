@@ -1,17 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+	public Text score;
+	public Text highScore;
+
 	private Character character;
 
 	void Awake ()
 	{
-		//DontDestroyOnLoad (gameObject);
-		//SceneManager.LoadScene ("Run", LoadSceneMode.Additive);
 		character = FindObjectOfType<Character> ();
+	}
+
+	public void Update() {
+		score.text = GameManager.instance.score.ToString();
+		highScore.text = "HI " + GameManager.GetHighscore ();
 	}
 
 	public void Duck ()

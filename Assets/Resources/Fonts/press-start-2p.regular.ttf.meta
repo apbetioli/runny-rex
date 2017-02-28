@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: 3f8ca4fc16d8d5b4080b41633ffc8b23
-timeCreated: 1488314783
+guid: adda1cb7005b8eb499b5e417e2932b55
+timeCreated: 1488321561
 licenseType: Free
 TrueTypeFontImporter:
   serializedVersion: 4
-  fontSize: 20
+  fontSize: 16
   forceTextureCase: -2
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Gameplay
+  fontName: Press Start 2P
   fontNames:
-  - Gameplay
+  - Press Start 2P
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 2

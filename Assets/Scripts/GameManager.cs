@@ -5,26 +5,40 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-	public float speed = 200;
+	public float speed = 200f;
+	public int score = 0;
+	public float acumTime = 0;
 
 	public static GameManager instance;
 
 	void OnEnable ()
 	{
 		GameManager.instance = this;
+		score = 0;
 	}
 
 	void Awake ()
 	{
 		DontDestroyOnLoad (this);
-		Time.timeScale = 1;
 		UI ();
 	}
 
-	public static void Die ()
+	void Start() {
+		Time.timeScale = 1;
+		score = 0;
+	}
+
+	void Update() {
+		acumTime += Time.deltaTime * Time.timeScale;
+		score = Mathf.RoundToInt (acumTime * speed / 10) ;
+	}
+
+	public void Die ()
 	{
 		Time.timeScale = 0;
 		SceneManager.LoadScene ("GameOver", LoadSceneMode.Additive);
+		if (score > GetHighscore ())
+			SetHighscore (score);
 	}
 
 	public static void Restart ()
@@ -36,4 +50,13 @@ public class GameManager : MonoBehaviour
 	{
 		SceneManager.LoadScene ("UI", LoadSceneMode.Additive);
 	}
+
+	public static int GetHighscore() {
+		return PlayerPrefs.GetInt("highscore", 0);
+	}
+
+	public static void SetHighscore(int highscore) {
+		PlayerPrefs.SetInt("highscore", highscore);
+	}
+
 }
