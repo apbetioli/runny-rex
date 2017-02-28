@@ -14,6 +14,7 @@ public class Character : MonoBehaviour
     private Rigidbody2D body;
     private bool onTheGround = false;
     private bool duck = false;
+	private bool dead = false;
     private float gravity;
     private float maxJumpVelocity;
     private float minJumpVelocity;
@@ -31,6 +32,7 @@ public class Character : MonoBehaviour
 
     void Update()
     {
+
         duck = false;
 		if (IsJumpPressed())
             Jump();
@@ -41,6 +43,7 @@ public class Character : MonoBehaviour
 
         GetComponentInChildren<Animator>().SetBool("Ground", onTheGround);
         GetComponentInChildren<Animator>().SetBool("Duck", duck);
+		GetComponentInChildren<Animator>().SetBool("Dead", dead);	
 
         CalculateGravity();
         AdjustJump();
@@ -111,6 +114,7 @@ public class Character : MonoBehaviour
 			onTheGround = true;
 		} else if ("Enemy" == other.gameObject.tag) {
 			GameManager.instance.Die ();
+			dead = true;
 		}
 	}
 
