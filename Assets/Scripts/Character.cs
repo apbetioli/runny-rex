@@ -139,8 +139,8 @@ public class Character : MonoBehaviour
         colliderBody = new Collider2DDTO();
         colliderBody.OffsetDefault = gameObject.GetComponents<BoxCollider2D>()[0].offset;
         colliderBody.SizeDefault = gameObject.GetComponents<BoxCollider2D>()[0].size;
-        colliderBody.OffsetDuck = new Vector2((colliderBody.OffsetDefault.x + 2.910191f), (colliderBody.OffsetDefault.y - 1.021085f));
-        colliderBody.SizeDuck = new Vector2((colliderBody.SizeDefault.x + 3.36957f), (colliderBody.SizeDefault.y - 2.04217f));
+        colliderBody.OffsetDuck = new Vector2((colliderBody.OffsetDefault.x + 2.910191f), (colliderBody.OffsetDefault.y - 1.8f));
+        colliderBody.SizeDuck = new Vector2((colliderBody.SizeDefault.x + 3.36957f), (colliderBody.SizeDefault.y - 3f));
 
         colliderHead = new Collider2DDTO();
         colliderHead.OffsetDefault = gameObject.GetComponents<BoxCollider2D>()[1].offset;
