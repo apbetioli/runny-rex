@@ -13,7 +13,7 @@ public class Character : MonoBehaviour
 
     private Rigidbody2D body;
     private bool onTheGround = false;
-    private bool crouching = false;
+    private bool duck = false;
     private float gravity;
     private float maxJumpVelocity;
     private float minJumpVelocity;
@@ -32,7 +32,7 @@ public class Character : MonoBehaviour
     void Update()
     {
 
-        crouching = false;
+        duck = false;
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.UpArrow))
             Jump();
         else if (Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow))
@@ -45,7 +45,7 @@ public class Character : MonoBehaviour
         }
 
         GetComponentInChildren<Animator>().SetBool("Ground", onTheGround);
-        GetComponentInChildren<Animator>().SetBool("Duck", crouching);
+        GetComponentInChildren<Animator>().SetBool("Duck", duck);
         CalculateGravity();
         AdjustJump();
     }
@@ -92,7 +92,7 @@ public class Character : MonoBehaviour
     {
         if (!onTheGround)
             return;
-        crouching = true;
+        duck = true;
         //TODO
     }
 
