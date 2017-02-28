@@ -32,22 +32,31 @@ public class Character : MonoBehaviour
     void Update()
     {
         duck = false;
-        if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.UpArrow))
+		if (IsJumpPressed())
             Jump();
-        else if (Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow))
-        {
+		else if (IsJumpReleased())
             ReleaseJump();
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
+		else if (IsDuckPressed())
             Duck();
-        }
 
         GetComponentInChildren<Animator>().SetBool("Ground", onTheGround);
         GetComponentInChildren<Animator>().SetBool("Duck", duck);
+
         CalculateGravity();
         AdjustJump();
     }
+
+	private bool IsJumpPressed() {
+		return Input.GetButton ("Jump") || Input.GetKey (KeyCode.UpArrow);
+	}
+
+	private bool IsJumpReleased() {
+		return Input.GetButtonUp ("Jump") || Input.GetKeyUp (KeyCode.UpArrow);
+	}
+
+	private bool IsDuckPressed() {
+		return Input.GetKey (KeyCode.DownArrow);
+	}
 
     private void CalculateGravity()
     {

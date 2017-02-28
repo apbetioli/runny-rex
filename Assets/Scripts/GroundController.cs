@@ -32,7 +32,8 @@ public class GroundController : MonoBehaviour {
 
 	private void UpdateGroundPosition() {
 		foreach(GameObject obj in groundPool) {
-			obj.transform.position += Vector3.left * velocity * Time.deltaTime;
+			float speed = velocity * GameManager.instance.speed;
+			obj.transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 
 		if (groundPool.Peek ().transform.position.x < -groundSize) {
