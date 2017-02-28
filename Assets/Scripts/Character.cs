@@ -14,13 +14,17 @@ public class Character : MonoBehaviour
     private Rigidbody2D body;
     private bool onTheGround = false;
     private bool duck = false;
-	private bool dead = false;
+    private bool dead = false;
     private float gravity;
     private float maxJumpVelocity;
     private float minJumpVelocity;
 
+    private Collider2DDTO colliderBody;
+    private Collider2DDTO colliderHead;
+
     void Awake()
     {
+        createCollidersDTO();
         body = GetComponent<Rigidbody2D>();
     }
 
@@ -32,34 +36,44 @@ public class Character : MonoBehaviour
 
     void Update()
     {
-
         duck = false;
-		if (IsJumpPressed())
+        RestoreCollidersPositions();
+        if (IsJumpPressed())
             Jump();
-		else if (IsJumpReleased())
+        else if (IsJumpReleased())
             ReleaseJump();
-		else if (IsDuckPressed())
+        else if (IsDuckPressed())
             Duck();
 
         GetComponentInChildren<Animator>().SetBool("Ground", onTheGround);
         GetComponentInChildren<Animator>().SetBool("Duck", duck);
-		GetComponentInChildren<Animator>().SetBool("Dead", dead);	
+        GetComponentInChildren<Animator>().SetBool("Dead", dead);
 
         CalculateGravity();
         AdjustJump();
     }
 
-	private bool IsJumpPressed() {
-		return Input.GetButton ("Jump") || Input.GetKey (KeyCode.UpArrow);
+	private void RestoreCollidersPositions(){
+		gameObject.GetComponents<BoxCollider2D>()[0].offset = colliderBody.OffsetDefault;
+        gameObject.GetComponents<BoxCollider2D>()[0].size = colliderBody.SizeDefault;
+        gameObject.GetComponents<BoxCollider2D>()[1].offset = colliderHead.OffsetDefault;
+        gameObject.GetComponents<BoxCollider2D>()[1].size = colliderHead.SizeDefault;
 	}
 
-	private bool IsJumpReleased() {
-		return Input.GetButtonUp ("Jump") || Input.GetKeyUp (KeyCode.UpArrow);
-	}
+    private bool IsJumpPressed()
+    {
+        return Input.GetButton("Jump") || Input.GetKey(KeyCode.UpArrow);
+    }
 
-	private bool IsDuckPressed() {
-		return Input.GetKey (KeyCode.DownArrow);
-	}
+    private bool IsJumpReleased()
+    {
+        return Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow);
+    }
+
+    private bool IsDuckPressed()
+    {
+        return Input.GetKey(KeyCode.DownArrow);
+    }
 
     private void CalculateGravity()
     {
@@ -104,19 +118,72 @@ public class Character : MonoBehaviour
         if (!onTheGround)
             return;
         duck = true;
-        //TODO
+        gameObject.GetComponents<BoxCollider2D>()[0].offset = colliderBody.OffsetDuck;
+        gameObject.GetComponents<BoxCollider2D>()[0].size = colliderBody.SizeDuck;
+        gameObject.GetComponents<BoxCollider2D>()[1].offset = colliderHead.OffsetDuck;
+        gameObject.GetComponents<BoxCollider2D>()[1].size = colliderHead.SizeDuck;
+
+
     }
 
-	void OnCollisionEnter2D (Collision2D other)
-	{
-		if ("Ground" == other.gameObject.tag) {
-			SetVelocityY (0);
-			onTheGround = true;
-		} else if ("Enemy" == other.gameObject.tag) {
-			GameManager.instance.Die ();
-			dead = true;
-		}
-	}
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if ("Ground" == other.gameObject.tag)
+        {
+            SetVelocityY(0);
+            onTheGround = true;
+        }
+        else if ("Enemy" == other.gameObject.tag)
+        {
+            GameManager.instance.Die ();
+            dead = true;
+        }
+    }
 
+    private void createCollidersDTO()
+    {
+        colliderBody = new Collider2DDTO();
+        colliderBody.OffsetDefault = gameObject.GetComponents<BoxCollider2D>()[0].offset;
+        colliderBody.SizeDefault = gameObject.GetComponents<BoxCollider2D>()[0].size;
+        colliderBody.OffsetDuck = new Vector2((colliderBody.OffsetDefault.x + 2.910191f), (colliderBody.OffsetDefault.y - 1.021085f));
+        colliderBody.SizeDuck = new Vector2((colliderBody.SizeDefault.x + 3.36957f), (colliderBody.SizeDefault.y - 2.04217f));
 
+        colliderHead = new Collider2DDTO();
+        colliderHead.OffsetDefault = gameObject.GetComponents<BoxCollider2D>()[1].offset;
+        colliderHead.SizeDefault = gameObject.GetComponents<BoxCollider2D>()[1].size;
+        colliderHead.OffsetDuck = new Vector2((colliderHead.OffsetDefault.x - 0.5f), (colliderHead.OffsetDefault.y - 7.446012f));
+        colliderHead.SizeDuck = new Vector2((colliderHead.SizeDefault.x + 1.51055f), (colliderHead.SizeDefault.y - 1.225291f));
+    }
+    class Collider2DDTO
+    {
+        private Vector2 offsetDefault;
+        private Vector2 sizeDefault;
+        private Vector2 offsetDuck;
+        private Vector2 sizeDuck;
+
+        public Vector2 OffsetDefault
+        {
+            get { return offsetDefault; }
+            set { offsetDefault = value; }
+        }
+
+        public Vector2 SizeDefault
+        {
+            get { return sizeDefault; }
+            set { sizeDefault = value; }
+        }
+
+        public Vector2 OffsetDuck
+        {
+            get { return offsetDuck; }
+            set { offsetDuck = value; }
+        }
+
+        public Vector2 SizeDuck
+        {
+            get { return sizeDuck; }
+            set { sizeDuck = value; }
+        }
+
+    }
 }
