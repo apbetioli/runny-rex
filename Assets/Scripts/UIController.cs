@@ -9,8 +9,8 @@ public class UIController : MonoBehaviour
 
 	void Awake ()
 	{
-		DontDestroyOnLoad (gameObject);
-		SceneManager.LoadScene ("Run", LoadSceneMode.Additive);
+		//DontDestroyOnLoad (gameObject);
+		//SceneManager.LoadScene ("Run", LoadSceneMode.Additive);
 		character = FindObjectOfType<Character> ();
 	}
 
