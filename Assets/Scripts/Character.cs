@@ -3,95 +3,106 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent (typeof(Rigidbody2D))]
-[RequireComponent (typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class Character : MonoBehaviour
 {
-	public float maxJumpHeight = 40;
-	public float minJumpHeight = 10;
-	public float timeToJumpApex = .4f;
+    public float maxJumpHeight = 40;
+    public float minJumpHeight = 10;
+    public float timeToJumpApex = .4f;
 
-	private Rigidbody2D body;
-	private bool onTheGround = false;
-	private float gravity;
-	private float maxJumpVelocity;
-	private float minJumpVelocity;
+    private Rigidbody2D body;
+    private bool onTheGround = false;
+    private bool crouching = false;
+    private float gravity;
+    private float maxJumpVelocity;
+    private float minJumpVelocity;
 
-	void Awake ()
-	{
-		body = GetComponent<Rigidbody2D> ();
-	}
+    void Awake()
+    {
+        body = GetComponent<Rigidbody2D>();
+    }
 
-	void Start ()
-	{
-		CalculateGravity ();
-		AdjustJump ();
-	}
+    void Start()
+    {
+        CalculateGravity();
+        AdjustJump();
+    }
 
-	void Update ()
-	{
-		if (Input.GetButtonDown ("Jump") || Input.GetKeyDown (KeyCode.UpArrow))
-			Jump ();
-		else if (Input.GetButtonUp ("Jump") || Input.GetKeyUp (KeyCode.UpArrow)) {
-			ReleaseJump ();
-		} else if (Input.GetKeyDown (KeyCode.DownArrow))
-			Duck ();
+    void Update()
+    {
 
-		CalculateGravity ();
-		AdjustJump ();
-	}
+        crouching = false;
+        if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.UpArrow))
+            Jump();
+        else if (Input.GetButtonUp("Jump") || Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            ReleaseJump();
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            Duck();
+        }
 
-	private void CalculateGravity ()
-	{
-		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
+        GetComponentInChildren<Animator>().SetBool("Ground", onTheGround);
+        GetComponentInChildren<Animator>().SetBool("Duck", crouching);
+        CalculateGravity();
+        AdjustJump();
+    }
 
-		float velocityY = body.velocity.y + gravity * Time.deltaTime;
-		SetVelocityY (velocityY);
-	}
+    private void CalculateGravity()
+    {
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
 
-	private void AdjustJump ()
-	{
-		maxJumpVelocity = Mathf.Abs (gravity) * timeToJumpApex;
-		minJumpVelocity = Mathf.Sqrt (2 * Mathf.Abs (gravity) * minJumpHeight);
-	}
+        float velocityY = body.velocity.y + gravity * Time.deltaTime;
+        SetVelocityY(velocityY);
+    }
 
-	private void SetVelocityY (float velocityY)
-	{
-		Vector2 velocity = body.velocity;
-		velocity.y = velocityY;
-		body.velocity = velocity;
-	}
+    private void AdjustJump()
+    {
+        maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
+    }
 
-	public void Jump ()
-	{
-		if (!onTheGround)
-			return;
-		
-		SetVelocityY (maxJumpVelocity);
-		onTheGround = false;
-	}
+    private void SetVelocityY(float velocityY)
+    {
+        Vector2 velocity = body.velocity;
+        velocity.y = velocityY;
+        body.velocity = velocity;
+    }
 
-	public void ReleaseJump ()
-	{
-		if (body.velocity.y > minJumpVelocity) {
-			SetVelocityY (minJumpVelocity);
-		}
-	}
+    public void Jump()
+    {
+        if (!onTheGround)
+            return;
 
-	public void Duck ()
-	{
-		if (!onTheGround)
-			return;
+        SetVelocityY(maxJumpVelocity);
+        onTheGround = false;
+    }
 
-		//TODO
-	}
+    public void ReleaseJump()
+    {
+        if (body.velocity.y > minJumpVelocity)
+        {
+            SetVelocityY(minJumpVelocity);
+        }
+    }
 
-	void OnCollisionEnter2D (Collision2D other)
-	{
-		if ("Ground" == other.gameObject.tag) {
-			SetVelocityY (0);
-			onTheGround = true;
-		}
-	}
+    public void Duck()
+    {
+        if (!onTheGround)
+            return;
+        crouching = true;
+        //TODO
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if ("Ground" == other.gameObject.tag)
+        {
+            SetVelocityY(0);
+            onTheGround = true;
+        }
+    }
 
 }
