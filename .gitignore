@@ -31,4 +31,4 @@ ehthumbs.db
 Thumbs.db
 
 *.apk
-Assets/VoxelImporter/
+Assets/VoxelImporter*

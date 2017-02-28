@@ -31,7 +31,7 @@ public class Character : MonoBehaviour
 
     void Update()
     {
-
+		
         crouching = false;
         if (Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.UpArrow))
             Jump();
@@ -96,13 +96,15 @@ public class Character : MonoBehaviour
         //TODO
     }
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if ("Ground" == other.gameObject.tag)
-        {
-            SetVelocityY(0);
-            onTheGround = true;
-        }
-    }
+	void OnCollisionEnter2D (Collision2D other)
+	{
+		if ("Ground" == other.gameObject.tag) {
+			SetVelocityY (0);
+			onTheGround = true;
+		} else if ("Enemy" == other.gameObject.tag) {
+			GameManager.instance.Die ();
+		}
+	}
+
 
 }

@@ -7,9 +7,9 @@ public class ScenarioElementController : MonoBehaviour {
 	public ScenarioElement[] prefabs;
 	public Transform spawnPoint;
 	public Transform destroyPoint;
-	public float velocity = 40f;
 	public float minTime = 1f;
 	public float maxTime = 4f;
+	public float speedRatio = 1f;
 
 	private float time = 0f;
 	private float sumTime = 0f;
@@ -40,7 +40,8 @@ public class ScenarioElementController : MonoBehaviour {
 		}
 
 		foreach(GameObject obj in pool) {
-			obj.transform.position += Vector3.left * velocity * Time.deltaTime;
+			float speed = speedRatio * GameManager.instance.speed;
+			obj.transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 	}
 
@@ -58,6 +59,5 @@ public class ScenarioElementController : MonoBehaviour {
 	private float RandomTime() {
 		return Random.Range (minTime, maxTime);
 	}
-
 
 }
