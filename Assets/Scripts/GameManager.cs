@@ -5,35 +5,44 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-	public float speed = 200f;
-	public int score = 0;
-	public float acumTime = 0;
-	public AudioSource highScoreSound;
-
 	public static GameManager instance;
+
+	public AudioSource highScoreSound;
+	[HideInInspector]
+	public int score = 0;
+	public int level = 0;
+	public float speed = 100f;
+	public float acceleration = 0.1f;
+
+	private float acumTime = 0;
 
 	void OnEnable ()
 	{
 		GameManager.instance = this;
-		score = 0;
 	}
 
 	void Awake ()
 	{
-		DontDestroyOnLoad (this);
 		UI ();
 	}
 
 	void Start() {
 		Time.timeScale = 1;
-		score = 0;
+		acumTime = level * 100;
+		score = (int) acumTime;
 	}
 
 	void Update() {
-		acumTime += Time.deltaTime * Time.timeScale;
-		score = Mathf.RoundToInt (acumTime * speed / 10) ;		
 		if (GetHighscore () == score +1)
 			highScoreSound.Play();
+
+		if (Time.timeScale == 0)
+			return;
+		
+		acumTime += Time.deltaTime * Time.timeScale * 10;
+		score = (int) acumTime;
+		level = score / 100;
+		Time.timeScale = 1 + level * acceleration;
 	}
 
 	public void Die ()
