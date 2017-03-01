@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 	public float speed = 200f;
 	public int score = 0;
 	public float acumTime = 0;
+	public AudioSource highScoreSound;
 
 	public static GameManager instance;
 
@@ -30,7 +31,9 @@ public class GameManager : MonoBehaviour
 
 	void Update() {
 		acumTime += Time.deltaTime * Time.timeScale;
-		score = Mathf.RoundToInt (acumTime * speed / 10) ;
+		score = Mathf.RoundToInt (acumTime * speed / 10) ;		
+		if (GetHighscore () == score +1)
+			highScoreSound.Play();
 	}
 
 	public void Die ()

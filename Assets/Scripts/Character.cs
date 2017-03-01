@@ -10,6 +10,9 @@ public class Character : MonoBehaviour
 	public float maxJumpHeight = 40;
 	public float minJumpHeight = 10;
 	public float timeToJumpApex = .4f;
+	public AudioSource jumpSound;
+	public AudioSource duckSound;
+	public AudioSource deadSound;
 
 	private Rigidbody2D body;
 	private bool onTheGround = false;
@@ -48,8 +51,6 @@ public class Character : MonoBehaviour
 			SetVelocityY (0);
 			return;
 		}
-		
-		duck = false;
 
 		if (IsJumpPressed ())
 			Jump ();
@@ -57,6 +58,9 @@ public class Character : MonoBehaviour
 			ReleaseJump ();
 		else if (IsDuckPressed ())
 			Duck ();
+		else        
+            duck = false;
+        
 		
 		CalculateGravity ();
 		AdjustJump ();
@@ -100,7 +104,7 @@ public class Character : MonoBehaviour
 	{
 		if (!onTheGround)
 			return;
-
+ 		jumpSound.Play();
 		SetVelocityY (maxJumpVelocity);
 		onTheGround = false;
 	}
@@ -116,6 +120,9 @@ public class Character : MonoBehaviour
 	{
 		if (!onTheGround)
 			return;
+		if (!duck)
+            duckSound.Play();
+
 		duck = true;
 		gameObject.GetComponents<BoxCollider2D> () [0].offset = colliderBody.OffsetDuck;
 		gameObject.GetComponents<BoxCollider2D> () [0].size = colliderBody.SizeDuck;
@@ -132,6 +139,7 @@ public class Character : MonoBehaviour
 		} else if ("Enemy" == other.gameObject.tag) {
 			GameManager.instance.Die ();
 			dead = true;
+			deadSound.Play();
 		}
 	}
 
