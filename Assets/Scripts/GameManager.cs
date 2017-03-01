@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 	public float acceleration = 0.1f;
 
 	private float acumTime = 0;
-
+	private bool playedSoundHiScore = false;
 	void OnEnable ()
 	{
 		GameManager.instance = this;
@@ -33,8 +33,10 @@ public class GameManager : MonoBehaviour
 	}
 
 	void Update() {
-		if (GetHighscore () == score +1)
+		if (GetHighscore () == score +1 && !playedSoundHiScore){
 			highScoreSound.Play();
+			playedSoundHiScore = true;
+		}
 
 		if (Time.timeScale == 0)
 			return;
