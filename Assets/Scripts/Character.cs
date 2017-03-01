@@ -24,11 +24,13 @@ public class Character : MonoBehaviour
 	private Animator animator;
 	private Collider2DDTO colliderBody;
 	private Collider2DDTO colliderHead;
+	private BoxCollider2D[] colliders;
 
 	void Awake ()
 	{
 		body = GetComponent<Rigidbody2D> ();
 		animator = GetComponentInChildren<Animator> ();
+		colliders = GetComponents<BoxCollider2D> ();
 		dead = false;
 		createCollidersDTO ();
 	}
@@ -42,8 +44,8 @@ public class Character : MonoBehaviour
 
 	void Update ()
 	{
-		animator.SetBool ("Ground", onTheGround);
 		animator.SetBool ("Duck", duck);
+		animator.SetBool ("Ground", onTheGround);
 		animator.SetBool ("Dead", dead);
 		RestoreCollidersPositions ();
 		 
@@ -102,8 +104,9 @@ public class Character : MonoBehaviour
 
 	public void Jump ()
 	{
-		if (!onTheGround)
+		if (!onTheGround || duck)
 			return;
+		
  		jumpSound.Play();
 		SetVelocityY (maxJumpVelocity);
 		onTheGround = false;
@@ -124,10 +127,10 @@ public class Character : MonoBehaviour
             duckSound.Play();
 
 		duck = true;
-		gameObject.GetComponents<BoxCollider2D> () [0].offset = colliderBody.OffsetDuck;
-		gameObject.GetComponents<BoxCollider2D> () [0].size = colliderBody.SizeDuck;
-		gameObject.GetComponents<BoxCollider2D> () [1].offset = colliderHead.OffsetDuck;
-		gameObject.GetComponents<BoxCollider2D> () [1].size = colliderHead.SizeDuck;
+		colliders [0].offset = colliderBody.OffsetDuck;
+		colliders [0].size = colliderBody.SizeDuck;
+		colliders [1].offset = colliderHead.OffsetDuck;
+		colliders [1].size = colliderHead.SizeDuck;
 	}
 
 	void OnCollisionEnter2D (Collision2D other)
@@ -146,24 +149,24 @@ public class Character : MonoBehaviour
 	private void createCollidersDTO ()
 	{
 		colliderBody = new Collider2DDTO ();
-		colliderBody.OffsetDefault = gameObject.GetComponents<BoxCollider2D> () [0].offset;
-		colliderBody.SizeDefault = gameObject.GetComponents<BoxCollider2D> () [0].size;
+		colliderBody.OffsetDefault = colliders [0].offset;
+		colliderBody.SizeDefault = colliders [0].size;
 		colliderBody.OffsetDuck = new Vector2 ((colliderBody.OffsetDefault.x + 2.910191f), (colliderBody.OffsetDefault.y - 1.8f));
 		colliderBody.SizeDuck = new Vector2 ((colliderBody.SizeDefault.x + 3.36957f), (colliderBody.SizeDefault.y - 3f));
 
 		colliderHead = new Collider2DDTO ();
-		colliderHead.OffsetDefault = gameObject.GetComponents<BoxCollider2D> () [1].offset;
-		colliderHead.SizeDefault = gameObject.GetComponents<BoxCollider2D> () [1].size;
+		colliderHead.OffsetDefault = colliders [1].offset;
+		colliderHead.SizeDefault = colliders [1].size;
 		colliderHead.OffsetDuck = new Vector2 ((colliderHead.OffsetDefault.x - 0.5f), (colliderHead.OffsetDefault.y - 7.446012f));
 		colliderHead.SizeDuck = new Vector2 ((colliderHead.SizeDefault.x + 1.51055f), (colliderHead.SizeDefault.y - 1.225291f));
 	}
 
 	private void RestoreCollidersPositions ()
 	{
-		gameObject.GetComponents<BoxCollider2D> () [0].offset = colliderBody.OffsetDefault;
-		gameObject.GetComponents<BoxCollider2D> () [0].size = colliderBody.SizeDefault;
-		gameObject.GetComponents<BoxCollider2D> () [1].offset = colliderHead.OffsetDefault;
-		gameObject.GetComponents<BoxCollider2D> () [1].size = colliderHead.SizeDefault;
+		colliders [0].offset = colliderBody.OffsetDefault;
+		colliders [0].size = colliderBody.SizeDefault;
+		colliders [1].offset = colliderHead.OffsetDefault;
+		colliders [1].size = colliderHead.SizeDefault;
 	}
 
 	class Collider2DDTO
