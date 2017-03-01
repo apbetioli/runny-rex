@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
 	private float acumTime = 0;
 	private bool playedSoundHiScore = false;
+
 	void OnEnable ()
 	{
 		GameManager.instance = this;
@@ -26,15 +27,17 @@ public class GameManager : MonoBehaviour
 		UI ();
 	}
 
-	void Start() {
+	void Start ()
+	{
 		Time.timeScale = 1;
 		acumTime = level * 100;
-		score = (int) acumTime;
+		score = (int)acumTime;
 	}
 
-	void Update() {
-		if (GetHighscore () == score +1 && !playedSoundHiScore){
-			highScoreSound.Play();
+	void Update ()
+	{
+		if (GetHighscore () == score + 1 && !playedSoundHiScore) {
+			highScoreSound.Play ();
 			playedSoundHiScore = true;
 		}
 
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviour
 			return;
 		
 		acumTime += Time.deltaTime * Time.timeScale * 10;
-		score = (int) acumTime;
+		score = (int)acumTime;
 		level = score / 100;
 		Time.timeScale = 1 + level * acceleration;
 	}
@@ -65,12 +68,14 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene ("UI", LoadSceneMode.Additive);
 	}
 
-	public static int GetHighscore() {
-		return PlayerPrefs.GetInt("highscore", 0);
+	public static int GetHighscore ()
+	{
+		return PlayerPrefs.GetInt ("highscore", 0);
 	}
 
-	public static void SetHighscore(int highscore) {
-		PlayerPrefs.SetInt("highscore", highscore);
+	public static void SetHighscore (int highscore)
+	{
+		PlayerPrefs.SetInt ("highscore", highscore);
 	}
 
 }

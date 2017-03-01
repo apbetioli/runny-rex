@@ -60,9 +60,8 @@ public class Character : MonoBehaviour
 			ReleaseJump ();
 		else if (IsDuckPressed ())
 			Duck ();
-		else        
-            duck = false;
-        
+		else
+			duck = false;        
 		
 		CalculateGravity ();
 		AdjustJump ();
@@ -107,7 +106,7 @@ public class Character : MonoBehaviour
 		if (!onTheGround || duck)
 			return;
 		
- 		jumpSound.Play();
+		jumpSound.Play ();
 		SetVelocityY (maxJumpVelocity);
 		onTheGround = false;
 	}
@@ -124,7 +123,7 @@ public class Character : MonoBehaviour
 		if (!onTheGround)
 			return;
 		if (!duck)
-            duckSound.Play();
+			duckSound.Play ();
 
 		duck = true;
 		colliders [0].offset = colliderBody.OffsetDuck;
@@ -142,7 +141,7 @@ public class Character : MonoBehaviour
 		} else if ("Enemy" == other.gameObject.tag) {
 			GameManager.instance.Die ();
 			dead = true;
-			deadSound.Play();
+			deadSound.Play ();
 		}
 	}
 
