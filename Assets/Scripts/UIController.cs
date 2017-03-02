@@ -10,19 +10,23 @@ public class UIController : MonoBehaviour
 
 	private Character character;
 	private bool duck;
+	private bool jump;
 
 	void Awake ()
 	{
 		character = FindObjectOfType<Character> ();
 		duck = false;
+		jump = false;
 	}
 
 	public void Update ()
 	{
-		score.text = GameManager.instance.score.ToString ();
+		score.text = GameManager.Instance.score.ToString ();
 		highScore.text = "HI " + GameManager.GetHighscore ();
 		if (duck)
 			character.Duck ();
+		if (jump)
+			character.Jump ();
 	}
 
 	public void Duck ()
@@ -33,15 +37,17 @@ public class UIController : MonoBehaviour
 	public void DuckUp ()
 	{
 		duck = false;
+		character.ReleaseDuck ();
 	}
 
 	public void Jump ()
 	{
-		character.Jump ();
+		jump = true;
 	}
 
 	public void JumpUp ()
 	{
+		jump = false;
 		character.ReleaseJump ();
 	}
 }

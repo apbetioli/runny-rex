@@ -40,7 +40,7 @@ public class ScenarioElementController : MonoBehaviour {
 		}
 
 		foreach(GameObject obj in pool) {
-			float speed = speedRatio * GameManager.instance.speed;
+			float speed = speedRatio * GameManager.Instance.speed;
 			obj.transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 	}

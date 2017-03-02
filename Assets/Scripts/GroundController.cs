@@ -32,7 +32,7 @@ public class GroundController : MonoBehaviour {
 
 	private void UpdateGroundPosition() {
 		foreach(GameObject obj in groundPool) {
-			float speed = speedRatio * GameManager.instance.speed;
+			float speed = speedRatio * GameManager.Instance.speed;
 			obj.transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 

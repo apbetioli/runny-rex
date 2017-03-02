@@ -5,21 +5,22 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-	public static GameManager instance;
+	public static GameManager Instance;
 
 	public AudioSource highScoreSound;
 	[HideInInspector]
 	public int score = 0;
 	public int level = 0;
 	public float speed = 100f;
-	public float acceleration = 0.1f;
+	public float acceleration = 0.001f;
+	public float timeScale = 1;
 
 	private float acumTime = 0;
 	private bool playedSoundHiScore = false;
 
 	void OnEnable ()
 	{
-		GameManager.instance = this;
+		GameManager.Instance = this;
 	}
 
 	void Awake ()
@@ -47,7 +48,8 @@ public class GameManager : MonoBehaviour
 		acumTime += Time.deltaTime * Time.timeScale * 10;
 		score = (int)acumTime;
 		level = score / 100;
-		Time.timeScale = 1 + level * acceleration;
+		Time.timeScale = 1 + score * acceleration;
+		timeScale = Time.timeScale;
 	}
 
 	public void Die ()

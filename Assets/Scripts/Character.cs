@@ -32,7 +32,7 @@ public class Character : MonoBehaviour
 		animator = GetComponentInChildren<Animator> ();
 		colliders = GetComponents<BoxCollider2D> ();
 		dead = false;
-		createCollidersDTO ();
+		CreateCollidersDTO ();
 	}
 
 	void Start ()
@@ -60,8 +60,8 @@ public class Character : MonoBehaviour
 			ReleaseJump ();
 		else if (IsDuckPressed ())
 			Duck ();
-		else
-			duck = false;        
+		else if (IsDuckReleased ())
+			ReleaseDuck ();
 		
 		CalculateGravity ();
 		AdjustJump ();
@@ -80,6 +80,11 @@ public class Character : MonoBehaviour
 	private bool IsDuckPressed ()
 	{
 		return Input.GetKey (KeyCode.DownArrow);
+	}
+
+	private bool IsDuckReleased()
+	{
+		return Input.GetKeyUp (KeyCode.DownArrow);
 	}
 
 	private void CalculateGravity ()
@@ -113,23 +118,27 @@ public class Character : MonoBehaviour
 
 	public void ReleaseJump ()
 	{
-		if (body.velocity.y > minJumpVelocity) {
+		if (body.velocity.y > minJumpVelocity)
 			SetVelocityY (minJumpVelocity);
-		}
 	}
 
 	public void Duck ()
 	{
-		if (!onTheGround)
+		if (!onTheGround || duck)
 			return;
-		if (!duck)
-			duckSound.Play ();
-
+		
+		duckSound.Play ();
 		duck = true;
+
 		colliders [0].offset = colliderBody.OffsetDuck;
 		colliders [0].size = colliderBody.SizeDuck;
 		colliders [1].offset = colliderHead.OffsetDuck;
 		colliders [1].size = colliderHead.SizeDuck;
+	}
+
+	public void ReleaseDuck ()
+	{
+		duck = false;
 	}
 
 	void OnCollisionEnter2D (Collision2D other)
@@ -139,13 +148,13 @@ public class Character : MonoBehaviour
 			onTheGround = true;
 
 		} else if ("Enemy" == other.gameObject.tag) {
-			GameManager.instance.Die ();
+			GameManager.Instance.Die ();
 			dead = true;
 			deadSound.Play ();
 		}
 	}
 
-	private void createCollidersDTO ()
+	private void CreateCollidersDTO ()
 	{
 		colliderBody = new Collider2DDTO ();
 		colliderBody.OffsetDefault = colliders [0].offset;
@@ -196,4 +205,5 @@ public class Character : MonoBehaviour
 		}
 
 	}
+
 }
