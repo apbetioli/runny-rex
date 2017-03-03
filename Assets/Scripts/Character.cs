@@ -33,6 +33,7 @@ public class Character : MonoBehaviour
 		colliders = GetComponents<BoxCollider2D> ();
 		dead = false;
 		CreateCollidersDTO ();
+		animator.SetBool ("Playing", GameManager.Playing);
 	}
 
 	void Start ()
