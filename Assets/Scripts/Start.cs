@@ -1,13 +1,14 @@
-﻿using UnityEngine.SceneManagement;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Start : MonoBehaviour {
+public class Start : MonoBehaviour
+{
 
-	public void Awake()
+    void Update()
     {
-//        if (!GameManager.Playing)
- //           SceneManager.LoadScene("Run", LoadSceneMode.Additive);
+        if (Input.GetButton("Jump"))
+            Restart();
     }
+
     public void Restart()
     {
         GameManager.Restart();

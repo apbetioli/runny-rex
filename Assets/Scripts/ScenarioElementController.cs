@@ -20,8 +20,8 @@ public class ScenarioElementController : MonoBehaviour {
 	}
 	
 	void Update () {
-//		if(!GameManager.Playing)
-//            return;
+		if(!GameManager.Playing)
+            return;
 			
 		CreateElements();
 	}
