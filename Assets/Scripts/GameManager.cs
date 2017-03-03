@@ -6,7 +6,8 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    private static bool playing = false;
+    //ALTERAR PARA FALSE QUANDO FECHAR O GAME 
+    private static bool playing = true;
     public AudioSource highScoreSound;
     [HideInInspector]
     public int score = 0;
