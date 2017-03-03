@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    //ALTERAR PARA FALSE QUANDO FECHAR O GAME 
-    private static bool playing = true;
+    public static GameManager Instance; 
+   // private static bool playing = false;
     public AudioSource highScoreSound;
     [HideInInspector]
     public int score = 0;
@@ -31,8 +30,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-		if (!Playing)
-            return;
+//		if (!Playing)
+//            return;
 
         Time.timeScale = 1;
         acumTime = level * 100;
@@ -41,8 +40,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-		if (!Playing)
-            return;
+//		if (!Playing)
+//            return;
 
         if (GetHighscore() == score + 1 && !playedSoundHiScore)
         {
@@ -71,7 +70,7 @@ public class GameManager : MonoBehaviour
     public static void Restart()
     {
         SceneManager.LoadScene("Run");
-		Playing = true;
+//		Playing = true;
     }
 
     public static void UI()
@@ -89,9 +88,9 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("highscore", highscore);
     }
 
-    public static bool Playing
-    {
-        get { return playing; }
-        set { playing = value; }
-    }
+//    public static bool Playing
+//    {
+//       get { return playing; }
+//        set { playing = value; }
+//    }
 }

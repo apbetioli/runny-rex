@@ -16,8 +16,8 @@ public class GroundController : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(!GameManager.Playing)
-            return;
+//		if(!GameManager.Playing)
+//           return;
 			
 		UpdateGroundPosition ();
 	}
