@@ -13,4 +13,14 @@ public class Start : MonoBehaviour
     {
         GameManager.Restart();
     }
+
+	public void ShowLeaderboard() 
+	{
+		GameManager.Instance.ShowLeaderboard ();
+	}
+
+	public void ShowAchievements()
+	{
+		GameManager.Instance.ShowAchievements ();
+	}
 }

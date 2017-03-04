@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; 
-    private static bool playing = false;
     public AudioSource highScoreSound;
     [HideInInspector]
     public int score = 0;
@@ -17,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     private float acumTime = 0;
     private bool playedSoundHiScore = false;
+	private bool playing = false;
+	private Leaderboard leaderboard;
 
     void OnEnable()
     {
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+		leaderboard = GetComponent<Leaderboard> ();
+
         UI();
     }
 
@@ -64,9 +67,13 @@ public class GameManager : MonoBehaviour
     public void Die()
     {
         Time.timeScale = 0;
+
         SceneManager.LoadScene("Start", LoadSceneMode.Additive);
+
         if (score > GetHighscore())
             SetHighscore(score);
+		
+		leaderboard.ReportScore (score);
     }
 
     public static void Restart()
@@ -92,7 +99,17 @@ public class GameManager : MonoBehaviour
 
     public static bool Playing
     {
-        get { return playing; }
-        set { playing = value; }
+        get { return Instance.playing; }
+		private set { Instance.playing = value; }
     }
+
+	public void ShowLeaderboard() 
+	{
+		leaderboard.ShowLeaderboard ();
+	}
+
+	public void ShowAchievements()
+	{
+		leaderboard.ShowAchievements ();
+	}
 }
