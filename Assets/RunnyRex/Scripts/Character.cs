@@ -148,8 +148,8 @@ public class Character : MonoBehaviour
 			SetVelocityY (0);
 			onTheGround = true;
 
-		} else if ("Enemy" == other.gameObject.tag) {
-			GameManager.Instance.Die ();
+		} else {
+			GameManager.Instance.Die (other.gameObject);
 			dead = true;
 			deadSound.Play ();
 		}

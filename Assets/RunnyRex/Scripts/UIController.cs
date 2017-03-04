@@ -21,8 +21,8 @@ public class UIController : MonoBehaviour
 
 	public void Update ()
 	{
-		score.text = GameManager.Instance.score.ToString ();
-		highScore.text = "HI " + GameManager.GetHighscore ();
+		score.text = GameManager.Instance.Score.ToString ();
+		highScore.text = "HI " + GameManager.Instance.Highscore;
 		if (duck)
 			character.Duck ();
 		if (jump)

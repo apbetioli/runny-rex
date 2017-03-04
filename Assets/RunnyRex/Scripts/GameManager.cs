@@ -2,22 +2,42 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using GameAnalyticsSDK;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; 
+    public static GameManager Instance;
+	private static bool playing = false;
+
     public AudioSource highScoreSound;
     [HideInInspector]
-    public int score = 0;
     public int level = 0;
     public float speed = 100f;
     public float acceleration = 0.001f;
     public float timeScale = 1;
 
+	private int score = 0;
     private float acumTime = 0;
     private bool playedSoundHiScore = false;
-	private bool playing = false;
 	private Leaderboard leaderboard;
+
+	private int highscore = 0;
+
+	public static bool Playing
+	{
+		get { return playing; }
+		private set { playing = value; }
+	}
+
+	public int Score
+	{
+		get { return score; }
+	}
+
+	public int Highscore
+	{
+		get { return highscore; }
+	}
 
     void OnEnable()
     {
@@ -41,6 +61,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         acumTime = level * 100;
         score = (int)acumTime;
+		highscore = Storage.Highscore;
+
+		Storage.NumberOfPlayedTimes = Storage.NumberOfPlayedTimes + 1;
+		GameAnalytics.NewProgressionEvent (GAProgressionStatus.Start, "1");
     }
 
     void Update()
@@ -48,7 +72,7 @@ public class GameManager : MonoBehaviour
 		if (!Playing)
             return;
 
-        if (GetHighscore() == score + 1 && !playedSoundHiScore)
+		if (highscore == score + 1 && !playedSoundHiScore)
         {
             highScoreSound.Play();
             playedSoundHiScore = true;
@@ -64,17 +88,26 @@ public class GameManager : MonoBehaviour
         timeScale = Time.timeScale;
     }
 
-    public void Die()
+	public void Die(GameObject other)
     {
         Time.timeScale = 0;
 
         SceneManager.LoadScene("Start", LoadSceneMode.Additive);
 
-        if (score > GetHighscore())
-            SetHighscore(score);
-		
-		leaderboard.ReportScore (score);
-    }
+		if (score > highscore) {
+			Storage.Highscore = score;
+			leaderboard.ReportScore (score);
+		}
+
+		if (other.transform.position.y == 0) {
+			Storage.DeathByGroundObstacles = Storage.DeathByGroundObstacles + 1;
+			GameAnalytics.NewProgressionEvent (GAProgressionStatus.Fail, "1", "ground", score);
+		} else {
+			Storage.DeathBySkyObstacles = Storage.DeathBySkyObstacles + 1;
+			GameAnalytics.NewProgressionEvent (GAProgressionStatus.Fail, "1", "sky", score);
+		}
+
+	}
 
     public static void Restart()
     {
@@ -87,29 +120,15 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("UI", LoadSceneMode.Additive);
     }
 
-    public static int GetHighscore()
-    {
-        return PlayerPrefs.GetInt("highscore", 0);
-    }
-
-    public static void SetHighscore(int highscore)
-    {
-        PlayerPrefs.SetInt("highscore", highscore);
-    }
-
-    public static bool Playing
-    {
-        get { return Instance.playing; }
-		private set { Instance.playing = value; }
-    }
-
 	public void ShowLeaderboard() 
 	{
 		leaderboard.ShowLeaderboard ();
+		GameAnalytics.NewDesignEvent ("Leaderboard");
 	}
 
 	public void ShowAchievements()
 	{
 		leaderboard.ShowAchievements ();
+		GameAnalytics.NewDesignEvent ("Achievements");
 	}
 }
