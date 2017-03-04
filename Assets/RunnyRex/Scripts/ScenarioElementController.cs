@@ -51,6 +51,10 @@ public class ScenarioElementController : MonoBehaviour {
 	private GameObject Spawn() {
 		int index = Random.Range (0, prefabs.Length);
 		ScenarioElement element = prefabs [index];
+
+		if (GameManager.Instance.Score < element.minScore)
+			return Spawn (); 
+
 		float spawnPositionY = Random.Range (element.minY, element.maxY);
 
 		GameObject obj = Instantiate (element.gameObject);
