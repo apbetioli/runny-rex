@@ -9,6 +9,9 @@ public class GroundController : MonoBehaviour {
 	public GameObject groundPrefab;
 	public float groundSize = 500f;
 	public float poolSize = 3;
+
+	public Transform destroyPoint;
+
 	private Queue<GameObject> groundPool = new Queue<GameObject>();
 
 	void Start () {
@@ -27,7 +30,7 @@ public class GroundController : MonoBehaviour {
 		for (int i = 0; i < poolSize; i++) {
 			GameObject ground = Instantiate (groundPrefab);
 			ground.transform.parent = transform;
-			ground.transform.position = new Vector3 (x, 0, 0);
+			ground.transform.position = new Vector3 (x, -10, 0);
 			groundPool.Enqueue (ground);
 			x += groundSize;
 		}
@@ -39,10 +42,10 @@ public class GroundController : MonoBehaviour {
 			obj.transform.position += Vector3.left * speed * Time.deltaTime;
 		}
 
-		if (groundPool.Peek ().transform.position.x < -groundSize) {
+		if (groundPool.Peek ().transform.position.x < destroyPoint.position.x) {
 			GameObject old = groundPool.Dequeue ();
 			Vector3 position = old.transform.position;
-			position.x = groundSize * (poolSize -1);
+			position.x += groundSize * (poolSize -1);
 			old.transform.position = position;
 			groundPool.Enqueue (old);
 		}

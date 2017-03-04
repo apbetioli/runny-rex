@@ -15,8 +15,6 @@ public class UIController : MonoBehaviour
 	void Awake ()
 	{
 		character = FindObjectOfType<Character> ();
-		duck = false;
-		jump = false;
 	}
 
 	public void Update ()
