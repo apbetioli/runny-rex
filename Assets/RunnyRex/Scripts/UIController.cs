@@ -8,13 +8,13 @@ public class UIController : MonoBehaviour
 	public Text score;
 	public Text highScore;
 
-	private Character character;
+	private Character[] character;
 	private bool duck;
 	private bool jump;
 
 	void Awake ()
 	{
-		character = FindObjectOfType<Character> ();
+		character = Resources.FindObjectsOfTypeAll<Character> ();
 	}
 
 	public void Update ()
@@ -22,9 +22,15 @@ public class UIController : MonoBehaviour
 		score.text = GameManager.Instance.Score.ToString ();
 		highScore.text = "HI " + GameManager.Instance.Highscore;
 		if (duck)
-			character.Duck ();
+			foreach (Character c in character) {
+				if(c.isActiveAndEnabled)
+					c.Duck ();
+			}
 		if (jump)
-			character.Jump ();
+			foreach (Character c in character) {
+				if(c.isActiveAndEnabled)
+					c.Jump ();
+			}
 	}
 
 	public void Duck ()
@@ -35,7 +41,10 @@ public class UIController : MonoBehaviour
 	public void DuckUp ()
 	{
 		duck = false;
-		character.ReleaseDuck ();
+		foreach (Character c in character) {
+			if(c.isActiveAndEnabled)
+				c.ReleaseDuck ();
+		}
 	}
 
 	public void Jump ()
@@ -46,7 +55,10 @@ public class UIController : MonoBehaviour
 	public void JumpUp ()
 	{
 		jump = false;
-		character.ReleaseJump ();
+		foreach (Character c in character) {
+			if(c.isActiveAndEnabled)
+				c.ReleaseJump ();
+		}
 	}
 }
 
