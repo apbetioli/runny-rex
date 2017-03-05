@@ -30,8 +30,6 @@ public class Character : MonoBehaviour
 	{
 		body = GetComponent<Rigidbody2D> ();
 		animator = GetComponentInChildren<Animator> ();
-		dead = false;
-		animator.SetBool ("Playing", GameManager.Playing);
 	}
 
 	void Start ()
@@ -39,6 +37,7 @@ public class Character : MonoBehaviour
 		dead = false;
 		CalculateGravity ();
 		AdjustJump ();
+		animator.SetBool ("Playing", GameManager.Playing);
 	}
 
 	void Update ()

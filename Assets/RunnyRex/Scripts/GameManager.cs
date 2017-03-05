@@ -20,8 +20,11 @@ public class GameManager : MonoBehaviour
     private float acumTime = 0;
     private bool playedSoundHiScore = false;
 	private Leaderboard leaderboard;
-
 	private int highscore = 0;
+	private GameSet[] gameSets;
+
+	public bool randomGameSet = true;
+	public GameSet selectedGameSet;
 
 	public static bool Playing
 	{
@@ -47,12 +50,17 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
 		leaderboard = GetComponent<Leaderboard> ();
+		gameSets = Resources.FindObjectsOfTypeAll<GameSet> ();
+		foreach (GameSet gameSet in gameSets)
+			gameSet.Unselect ();
 
         UI();
     }
 
     void Start()
-    {
+    {	
+		SelectGameSet ();
+
 		if (!Playing){
             SceneManager.LoadScene("Start", LoadSceneMode.Additive);
             return;
@@ -130,5 +138,21 @@ public class GameManager : MonoBehaviour
 	{
 		leaderboard.ShowAchievements ();
 		GameAnalytics.NewDesignEvent ("Achievements");
+	}
+
+	private void SelectGameSet() {
+		if (!randomGameSet) {
+			if (selectedGameSet != null)
+				gameSets [0].Select ();
+				return;
+		}
+		
+		if (selectedGameSet != null)
+			selectedGameSet.Unselect ();
+		
+		int index = Random.Range (0, gameSets.Length);
+		selectedGameSet = gameSets [index];
+		selectedGameSet.Select ();
+		Debug.Log ("Selected game set: " + selectedGameSet.name);
 	}
 }
