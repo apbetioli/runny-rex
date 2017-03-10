@@ -36,23 +36,19 @@ public class Leaderboard : MonoBehaviour {
 		#endif
 	}
 
-	public void ReportScore(int score) {
+	public void ReportHighScore() {
 		#if UNITY_ANDROID
-		Social.localUser.Authenticate((auth,msg) => {
-			Debug.Log(msg);
-
-			if (auth) {
-				Social.ReportScore(score, GPGSIds.leaderboard_long_run, success => {
-					if(success)
-						Debug.Log("Report score ok");
-					else
-						Debug.LogWarning("Report score failed");
-				});
-			}
-			else {
-				Debug.LogWarning("Authentication failed");
-			}
-		});	
+		if (Social.localUser.authenticated) {
+			Social.ReportScore(Storage.Highscore, GPGSIds.leaderboard_long_run, success => {
+				if(success)
+					Debug.Log("Report score ok");
+				else
+					Debug.LogWarning("Report score failed");
+			});
+		}
+		else {
+			Debug.LogWarning("Unable to report score. Not Authenticated.");
+		}
 		#endif
 	}
 
@@ -88,7 +84,6 @@ public class Leaderboard : MonoBehaviour {
 		});
 		#endif
 	}
-
 
 	public void UnlockAchievement(string id) {
 		#if UNITY_ANDROID

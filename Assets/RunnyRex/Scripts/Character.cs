@@ -62,7 +62,9 @@ public class Character : MonoBehaviour
 			Duck ();
 		else if (IsDuckReleased ())
 			ReleaseDuck ();
-		
+	}
+
+	void FixedUpdate() {
 		CalculateGravity ();
 		AdjustJump ();
 	}
@@ -91,7 +93,7 @@ public class Character : MonoBehaviour
 	{
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 
-		float velocityY = body.velocity.y + gravity * Time.deltaTime;
+		float velocityY = body.velocity.y + gravity * Time.fixedDeltaTime;
 		SetVelocityY (velocityY);
 	}
 
@@ -144,6 +146,13 @@ public class Character : MonoBehaviour
 
 		} else {
 			GameManager.Instance.Die (other.gameObject);
+
+			// Fix obstacle position because of collider imprecision
+			Vector2 p1 = other.transform.position;
+			Vector2 p2 = other.contacts [0].point;
+			p1.x += (p2.x - p1.x) / 2;
+			other.transform.position = p1;
+
 			dead = true;
 			deadSound.Play ();
 		}

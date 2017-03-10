@@ -26,6 +26,11 @@ public class GameManager : MonoBehaviour
 	public bool randomGameSet = true;
 	public GameSet selectedGameSet;
 
+	/*
+	 * Used for keeping the same selected level the first time that enters the game, otherwise it becomes weird.
+	 */
+	private static int timesPlayedThisSession = 0;
+
 	public static bool Playing
 	{
 		get { return playing; }
@@ -59,6 +64,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {	
+		timesPlayedThisSession++;
+
 		SelectGameSet ();
 
 		if (!Playing){
@@ -104,7 +111,7 @@ public class GameManager : MonoBehaviour
 
 		if (score > highscore) {
 			Storage.Highscore = score;
-			leaderboard.ReportScore (score);
+			leaderboard.ReportHighScore ();
 		}
 
 		if (other.transform.position.y == 0) {
@@ -141,18 +148,19 @@ public class GameManager : MonoBehaviour
 	}
 
 	private void SelectGameSet() {
-		if (!randomGameSet) {
-			if (selectedGameSet != null)
-				gameSets [0].Select ();
-				return;
+		if (selectedGameSet == null)
+			selectedGameSet = gameSets [0];
+			
+		if (!randomGameSet || timesPlayedThisSession <= 2) {
+			selectedGameSet.Select ();
+			return;
 		}
 		
-		if (selectedGameSet != null)
-			selectedGameSet.Unselect ();
+		selectedGameSet.Unselect ();
 		
 		int index = Random.Range (0, gameSets.Length);
 		selectedGameSet = gameSets [index];
 		selectedGameSet.Select ();
-		Debug.Log ("Selected game set: " + selectedGameSet.name);
+		Debug.Log ("Randomly selected game set: " + selectedGameSet.name);
 	}
 }
