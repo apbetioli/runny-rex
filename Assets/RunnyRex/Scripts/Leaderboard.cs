@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using System.Collections;
+#if UNITY_ANDROID
 using GooglePlayGames;
+#endif
 
 /*
  * Controls the interaction with Google play leaderboard

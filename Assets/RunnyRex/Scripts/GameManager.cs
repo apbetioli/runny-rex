@@ -2,7 +2,6 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
-using GameAnalyticsSDK;
 
 public class GameManager : MonoBehaviour
 {
@@ -79,7 +78,6 @@ public class GameManager : MonoBehaviour
 		highscore = Storage.Highscore;
 
 		Storage.NumberOfPlayedTimes = Storage.NumberOfPlayedTimes + 1;
-		GameAnalytics.NewProgressionEvent (GAProgressionStatus.Start, "1");
     }
 
     void Update()
@@ -116,10 +114,8 @@ public class GameManager : MonoBehaviour
 
 		if (other.transform.position.y == 0) {
 			Storage.DeathByGroundObstacles = Storage.DeathByGroundObstacles + 1;
-			GameAnalytics.NewProgressionEvent (GAProgressionStatus.Fail, "1", "ground", score);
 		} else {
 			Storage.DeathBySkyObstacles = Storage.DeathBySkyObstacles + 1;
-			GameAnalytics.NewProgressionEvent (GAProgressionStatus.Fail, "1", "sky", score);
 		}
 
 	}
@@ -138,13 +134,11 @@ public class GameManager : MonoBehaviour
 	public void ShowLeaderboard() 
 	{
 		leaderboard.ShowLeaderboard ();
-		GameAnalytics.NewDesignEvent ("Leaderboard");
 	}
 
 	public void ShowAchievements()
 	{
 		leaderboard.ShowAchievements ();
-		GameAnalytics.NewDesignEvent ("Achievements");
 	}
 
 	private void SelectGameSet() {
